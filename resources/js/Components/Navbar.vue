@@ -1,0 +1,40 @@
+<script setup>
+import { ref } from 'vue';
+import Menubar from 'primevue/menubar';
+
+const items = ref([
+    {
+        label: 'Home',
+        icon: 'pi pi-home',
+        route: '/home'
+    },
+    {
+        label: 'Orders',
+        icon: 'pi pi-shopping-cart',
+        route: '/orders'
+    },
+    {
+        label: 'Prducts',
+        icon: 'pi pi-box',
+        route: '/products'
+    }
+]);
+</script>
+
+<template>
+    <Menubar :model="items">
+      <template #item="{ item, props }">
+        <router-link v-if="item.route" v-slot="{ href, navigate }" :to="item.route" custom>
+          <a :href="href" v-bind="props.action" @click="navigate">
+            <span :class="item.icon" />
+            <span v-text="item.label" />
+          </a>
+        </router-link>
+      </template>
+      <template #end>
+        <div class="flex items-center gap-2">
+          Hello
+        </div>
+      </template>
+    </Menubar>
+</template>

@@ -10,7 +10,7 @@ import Navbar from '@/Components/Navbar.vue';
   <div class="card">
     <Navbar />
     <div class="flex justify-center items-center h-screen">
-      <h1 class="text-4xl font-bold">Welcome to the Products Page</h1>
+      <h1 class="text-4xl font-bold">Welcome to the Home Page</h1>
     </div>
   </div>
 </template>

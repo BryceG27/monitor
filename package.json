@@ -21,6 +21,7 @@
     },
     "dependencies": {
         "@primeuix/themes": "^1.1.1",
+        "moment": "^2.30.1",
         "primeicons": "^7.0.0",
         "primevue": "^4.3.4",
         "sweetalert2": "^11.21.2",

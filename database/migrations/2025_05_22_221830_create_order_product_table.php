@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(\App\Models\Order::class);
             $table->foreignIdFor(\App\Models\Product::class);
-            $table->integer('qty')->default(1);
+            $table->integer('quantity')->default(1);
             $table->timestamps();
         });
     }

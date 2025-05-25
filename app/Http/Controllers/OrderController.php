@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\Order;
 use Illuminate\Http\Request;
 
@@ -12,12 +13,9 @@ class OrderController extends Controller
      */
     public function index(Request $request)
     {
-        $orders = Order::paginate(15);
+        $orders = Order::select(['id', 'name', 'description', 'date'])->with('products')->paginate(15);
 
-        return response()->json([
-            'success' => true,
-            'data' => $orders
-        ]);
+        return response()->json($orders);
     }
 
     /**
@@ -25,15 +23,17 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
-        
-    }
+        $data = Order::validate($request);
+        $data['date'] = !empty($data['date']) ? Carbon::createFromFormat('d/m/Y', $data['date'])->format('Y-m-d') : date('Y-m-d');
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Order $order)
-    {
-        //
+        $order = Order::create($data);
+        if ($request->has('products')) {
+            foreach ($request->products as $product) {
+                $order->products()->attach($product['id'], ['quantity' => $product['quantity'] ?? 1]);
+            }
+        }
+
+        return response()->json($order, 201);
     }
 
     /**
@@ -41,7 +41,17 @@ class OrderController extends Controller
      */
     public function update(Request $request, Order $order)
     {
-        //
+        $data = Order::validate($request);
+        $data['date'] = !empty($data['date']) ? Carbon::createFromFormat('d/m/Y', $data['date'])->format('Y-m-d') : date('Y-m-d');
+
+        $order->update($data);
+        if ($request->has('products')) {
+            $order->products()->detach();
+
+            foreach ($request->products as $product) {
+                $order->products()->attach($product['id'], ['quantity' => $product['quantity'] ?? 1]);
+            }
+        }
     }
 
     /**
@@ -49,6 +59,9 @@ class OrderController extends Controller
      */
     public function destroy(Order $order)
     {
-        
+        $order->products()->detach();
+        $order->delete();
+
+        return response()->json(null, 204);
     }
 }

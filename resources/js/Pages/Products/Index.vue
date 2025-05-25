@@ -3,9 +3,9 @@ import { onMounted, ref, reactive } from 'vue'
 import axios from 'axios';
 import Swal from 'sweetalert2';
 
+import Navbar from '@/Components/Navbar.vue';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
-import Navbar from '@/Components/Navbar.vue';
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
 import InputText from 'primevue/inputtext';
@@ -31,6 +31,15 @@ const getProducts = async () => {
     products.value = response.data;
   } catch (error) {
     console.error('Error fetching products:', error);
+  }
+}
+
+const createProduct = () => {
+  showProductDialog = true
+  selectedProduct = { 
+    id: null, 
+    name: '', 
+    price: 0 
   }
 }
 
@@ -152,7 +161,7 @@ const deleteProduct = () => {
     >
       <template #header>
         <div class="flex justify-end p-3">
-          <Button @click="showProductDialog = true, selectedProduct = { id: null, name: '', price: 0 }" class="p-button-success me-3">
+          <Button @click="createProduct" class="p-button-success me-3">
             <i class="pi pi-plus me-2"></i>
             Create Product
           </Button>
@@ -171,7 +180,11 @@ const deleteProduct = () => {
         </template>
       </Column>
       <Column style="width: 45%" field="name" header="Name" />
-      <Column style="width: 45%" field="price" header="Price" />
+      <Column style="width: 45%" field="price" header="Price">
+        <template #body="{ data }">
+          {{ data.price.toFixed(2) }} &euro;
+        </template> 
+      </Column>
     </DataTable>
   </div>
 </template>

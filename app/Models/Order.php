@@ -26,7 +26,8 @@ class Order extends Model
         return $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string|max:1000',
-            'date' => 'required|date',
+            'date' => 'nullable|date_format:d/m/Y',
+            'products' => 'nullable|array',
         ]);
     }
 }

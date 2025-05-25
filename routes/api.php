@@ -20,7 +20,7 @@ Route::prefix('/products')->group(function() {
     // Route::get('/{product}/show', [ProductController::class, 'show'])->name('products.show');
     Route::post('/', [ProductController::class, 'store'])->name('products.store');
     Route::patch('/{product}/update', [ProductController::class, 'update'])->name('products.update');
-    Route::delete('/', [ProductController::class, 'destroy'])->name('products.destroy');
+    Route::delete('/{product}/delete', [ProductController::class, 'destroy'])->name('products.destroy');
 });
 
 Route::prefix('/orders')->group(function() {
@@ -28,5 +28,5 @@ Route::prefix('/orders')->group(function() {
     // Route::get('/{order}/show', [OrderController::class, 'show'])->name('orders.show');
     Route::post('/', [OrderController::class, 'store'])->name('orders.store');
     Route::patch('/{order}/update', [OrderController::class, 'update'])->name('orders.update');
-    Route::delete('/', [OrderController::class, 'destroy'])->name('orders.destroy');
+    Route::delete('/{order}/delete', [OrderController::class, 'destroy'])->name('orders.destroy');
 });

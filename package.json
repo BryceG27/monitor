@@ -23,6 +23,7 @@
         "@primeuix/themes": "^1.1.1",
         "primeicons": "^7.0.0",
         "primevue": "^4.3.4",
+        "sweetalert2": "^11.21.2",
         "vue-router": "^4.5.1"
     }
 }

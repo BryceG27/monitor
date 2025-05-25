@@ -6,7 +6,7 @@ const items = ref([
     {
         label: 'Home',
         icon: 'pi pi-home',
-        route: '/home'
+        route: '/'
     },
     {
         label: 'Orders',
@@ -14,7 +14,7 @@ const items = ref([
         route: '/orders'
     },
     {
-        label: 'Prducts',
+        label: 'Products',
         icon: 'pi pi-box',
         route: '/products'
     }

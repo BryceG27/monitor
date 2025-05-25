@@ -30,7 +30,7 @@ class OrderController extends Controller
         if ($request->has('products')) {
             foreach ($request->products as $product) {
                 $order->products()->attach($product['id'], ['quantity' => $product['quantity'] ?? 1]);
-            }
+            } 
         }
 
         return response()->json($order, 201);
@@ -52,6 +52,8 @@ class OrderController extends Controller
                 $order->products()->attach($product['id'], ['quantity' => $product['quantity'] ?? 1]);
             }
         }
+
+        return response()->json(201);
     }
 
     /**

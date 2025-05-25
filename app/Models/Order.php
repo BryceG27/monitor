@@ -28,6 +28,9 @@ class Order extends Model
             'description' => 'nullable|string|max:1000',
             'date' => 'nullable|date_format:d/m/Y',
             'products' => 'nullable|array',
+            'products.*.id' => 'required|exists:products,id',
+        ], [
+            'products.exists' => 'The selected product does not exist.',
         ]);
     }
 }

@@ -28,4 +28,4 @@ COPY . .
 RUN chown -R www-data:www-data /var/www && chmod -R 775 /var/www/storage /var/www/bootstrap/cache
 
 # Install composer dependencies
-# RUN composer install
+RUN composer install

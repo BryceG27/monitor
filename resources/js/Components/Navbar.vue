@@ -31,10 +31,5 @@ const items = ref([
           </a>
         </router-link>
       </template>
-      <template #end>
-        <div class="flex items-center gap-2">
-          Hello
-        </div>
-      </template>
     </Menubar>
 </template>

@@ -9,15 +9,15 @@ const items = ref([
         route: '/'
     },
     {
+        label: 'Products',
+        icon: 'pi pi-box',
+        route: '/products'
+    },
+    {
         label: 'Orders',
         icon: 'pi pi-shopping-cart',
         route: '/orders'
     },
-    {
-        label: 'Products',
-        icon: 'pi pi-box',
-        route: '/products'
-    }
 ]);
 </script>
 

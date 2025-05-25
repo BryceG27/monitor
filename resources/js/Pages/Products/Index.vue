@@ -35,8 +35,8 @@ const getProducts = async () => {
 }
 
 const createProduct = () => {
-  showProductDialog = true
-  selectedProduct = { 
+  showProductDialog.value = true
+  selectedProduct.value = { 
     id: null, 
     name: '', 
     price: 0 

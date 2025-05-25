@@ -166,33 +166,35 @@ const closeModal = () => {
         v-model:visible="showOrderDialog"
         modal
         :header="selectedOrder.id ? 'Edit Order' : 'Create Order'"
-        :style="{ width: '50vw' }"
+        :style="{ width: '65vw' }"
     >
         <form @submit.prevent="saveOrder">
-            <div class="p-field pb-8 w-100">
-                <FloatLabel variant="in">
-                <InputText id="name" v-model="selectedOrder.name" variant="filled" class="w-100" inputClass="w-100" />
-                <label for="name">Order name</label>
-                </FloatLabel>
-            </div>
-            <div class="p-field pb-8 w-100">
-                <FloatLabel variant="in">
-                <Textarea v-model="selectedOrder.description" rows="5" cols="30" />
-                <label for="description">Order description</label>
-                </FloatLabel>
-            </div>
-            <div class="p-field w-100">
-                <FloatLabel variant="in">
-                <DatePicker
-                    v-model="selectedOrder.date"
-                    id="date"
-                    :showIcon="true"
-                    :placeholder="'Select Date'"
-                    class="w-100" 
-                    format="dd/mm/yy"
-                />
-                <label for="date">Date</label>
-                </FloatLabel>
+            <div class="flex gap-4 items-center">
+                <div class="w-full justify-end">
+                    <FloatLabel variant="in">
+                        <InputText id="name" v-model="selectedOrder.name" variant="filled" class="w-full" inputClass="w-full" />
+                        <label for="name">Order name</label>
+                    </FloatLabel>
+                </div>
+                <div class="w-full justify-end">
+                    <FloatLabel variant="in">
+                        <DatePicker
+                            v-model="selectedOrder.date"
+                            id="date"
+                            :showIcon="true"
+                            :placeholder="'Select Date'"
+                            class="w-full"
+                            format="dd/mm/yy"
+                        />
+                        <label for="date">Date</label>
+                    </FloatLabel>
+                </div>
+                <div class="w-full justify-end">
+                    <FloatLabel variant="in">
+                        <Textarea v-model="selectedOrder.description" rows="3" cols="30" class="w-full" />
+                        <label for="description">Order description</label>
+                    </FloatLabel>
+                </div>
             </div>
 
             <div class="p-4 pt-6">
@@ -206,7 +208,7 @@ const closeModal = () => {
                     >
                         <Column style="width: 40%" field="name" header="Name" />
                         <Column style="width: 40%" field="price" header="Price" />
-                        <Column style="width: 20%">
+                        <Column style="width: 20%" header="Quantity">
                             <template #body="{ data }">
                                 <InputNumber 
                                     v-model="data.quantity"

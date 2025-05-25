@@ -25,6 +25,15 @@ The `.env` file is setted to map ports for a multi-environment system: change `*
                 start all the containers needed;
             </li>
             <li>
+                import Node;
+            </li>
+            <li>
+                install all of the Node dependencies;
+            </li>
+            <li>
+                make a new build of the assets;
+            </li>
+            <li>
                 enter in the shell of the container named <strong><em>app</em></strong>;
             </li>
         </ol>
@@ -58,8 +67,9 @@ In case the Makefile and the make command won't work <em>(or you don't want to u
 
 #### Things to know before starting w/o Docker
  - The database parameters are setted to use Docker containers and variables. You'll need to change the variable <code>DB_HOST</code> to <em>localhost</em> or to <em>127.0.0.1</em> instead of <em>DB</em>. Of course you'll have to change <code>DB_DATABASE</code>, <code>DB_USERNAME</code> and <code>DB_PASSWORD</code> variables too.
- - For this version of Laravel (v.11), sqlite is the default choice: you need just to comment all <code>DB_*</code> variables except the CONNECTION one that needs to be <code>sqlite</code>.
- - This version of Laravel (v.11) needs at least the version 8.2 of PHP.
+ - For this version of Laravel (v.12), sqlite is the default choice: you need just to comment all <code>DB_*</code> variables except the CONNECTION one that needs to be <code>sqlite</code>.
+ - This version of Laravel (v.12) needs at least the version 8.2 of PHP.
+ - You need Node and NPM to build the assets 
 
 #### Commands list
 <ol>
@@ -70,7 +80,13 @@ In case the Makefile and the make command won't work <em>(or you don't want to u
         Use the command <code>php artisan key:generate</code> to generate the unique key for your app;
     </li>
     <li>
-        Now you just need to insert the command <code>php artisan migrate</code> to setup your database.
+        Now you just need to insert the command <code>php artisan migrate</code> to setup your database;
+    </li>
+    <li>
+        Than you can install all the Node packages;
+    </li>
+    <li>
+        And build your assets with the command <code>npm run build</code>
     </li>
 </ol>
 
@@ -81,14 +97,14 @@ From now on you can start using all the APIs written in the <strong style="font-
 In the shell of your Docker container or your local directory you can:
 <ul>
     <li>
-        Create a test user using the command <code>php artisan db:seed</code>;
+        Create 50 products using the command <code>php artisan db:seed ProductsSeeder</code>;
+    </li>
+    <li>
+        Create 50 orders using the command <code>php artisan db:seed OrdersSeeder</code>;
     </li>
     <strong>OR</strong>
-    <li>Create a test user and some test products using the command <code>php artisan db:seed DevSeeder</code></li>
+    <li>Create a both using the command <code>php artisan db:seed DevSeeder</code></li>
 </ul>
-
-Both commands will create a new user with <em>test@example.com</em> as email and <em>supersecurepassword</em> as password. <br>
-The <em>DevSeeder</em> option will create some products to help you start create some orders.
 
 ## Testing
 
@@ -111,53 +127,99 @@ The <em>DevSeeder</em> option will create some products to help you start create
     </li>
 </ol>
 
+### Dipping down
+
+<ul>
+    <li>
+        From the Homepage you will see 3 menus, <em>Home</em>, <em>Products</em>, <em>Orders</em>.
+    </li>
+</ul>
+
+#### Products
+<ul>
+    <li>
+        Entering the page, after the mouting of the component Index, will be recovered via an api call all the products that are not deleted which will be shown in the main table;
+    </li>
+    <li>
+        In order to create a new product you have to open the dialog form trough the <code>Create Product</code> button;
+        <ul>
+            <li>
+                Here you can set a name and a price for your new product.
+            </li>
+        </ul>
+    </li>
+    <li>
+        To edit a product you have to click the green pencil in the first column of the table.
+        <ul>
+            <li>
+                This action will open up the Form Dialog with all of the informations about the product.
+            </li>
+        </ul>
+    </li>
+    <li>
+        On the right of the <code>Edit button</code>, you will find a trash can to soft eliminate the product after the confirmation of the action.
+        <ul>
+            <li>
+                Watch out! If you try to eliminate a product that is already synced to a order, the app will inform you that the action is not allowed.
+            </li>
+        </ul>
+    </li>
+</ul>
+
+#### Orders
+<ul>
+    <li>
+        Entering the page, after the mounting of the component Index, will be recovered via two api calls all the orders and all the products that are not deleted. The Orders will be shown in the table component;
+    </li>
+    <li>
+        In order to create a new product you have to open the dialog form trough the <code>Create Order</code> button;
+        <ul>
+            <li>
+                Here you can set:
+                <ul>
+                    <li>A name for your order;</li>
+                    <li>A description;</li>
+                    <li>A date;</li>
+                    <li>And, clicking on the product's rows in the table and selecting a quantity for them, you can attach some items for the new order</li>
+                </ul>
+            </li> 
+        </ul>
+    </li>
+    <li>
+        The first column of the Orders Table is an expandable row that includes all the order items related to the order and delete some column
+    </li>
+    <li>
+        To edit a order you have to click the green pencil in the first column of the table.
+        <ul>
+            <li>
+                This action will open up the Form Dialog with all of the informations about the order.
+            </li>
+            <li>
+                By de-selecting the green rows and saving, you can also remove the items from the order
+            </li>
+        </ul>
+    </li>
+    <li>
+        On the right of the <code>Edit button</code>, you will find a trash can to soft eliminate the order after the confirmation of the action.
+    </li>
+</ul>
+
 ### The test framework
 The test framework used for this project is PEST. It's been created by one of the Laravel Developers so the integration is flawless and the syntax of it is really simple.
 
 The following tests are all written in the directory <code>tests/Feature</code>:
 <ul>
     <li>
-        <strong>\Auth\AuthenticationTest</strong> will:
-        <ol>
-            <li>
-                Check if users can authenticate;
-            </li>
-            <li>
-                Check if users cannot authenticate with wrong password;
-            </li>
-            <li>
-                Check if users can logout;
-            </li>
-            <li>
-                Check if users can operate if they are not logged.
-            </li>
-        </ol>
-    </li>
-    <li>
-        <strong>\Auth\RegistrationTest</strong> will:
-        <ol>
-            <li>
-                Check if users can register new users;
-            </li>
-            <li>
-                Check if users can create a new user with API.
-            </li>
-        </ol>
-    </li>
-    <li>
-        <strong>\Auth\UpdateTest</strong> will update user data with API.
-    </li>
-    <li>
         <strong>CRUDProductTest</strong> will:
         <ol>
             <li>
-                Check if users can create a product;
+                Check if a product can be created;
             </li>
             <li>
-                Check if users can update a product;
+                Check if a product can be updated;
             </li>
             <li>
-                Check if users can delete a product.
+                Check if a product can be deleted.
             </li>
         </ol>
     </li>
@@ -165,13 +227,13 @@ The following tests are all written in the directory <code>tests/Feature</code>:
         <strong>CRUDOrderTest</strong> will:
         <ol>
             <li>
-                Check if users can create a order;
+                Check if a order can be created;
             </li>
             <li>
-                Check if users can update a order;
+                Check if a order can be updated;
             </li>
             <li>
-                Check if users can delete a order.
+                Check if a order can be deleted.
             </li>
         </ol>
     </li>

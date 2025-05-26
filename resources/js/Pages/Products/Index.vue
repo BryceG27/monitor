@@ -159,6 +159,12 @@ const deleteProduct = () => {
     <DataTable 
       :value="products"
     >
+      <template #empty>
+        <div class="text-center p-4">
+            <i class="pi pi-exclamation-triangle"></i>
+            No products found.
+        </div>
+      </template>
       <template #header>
         <div class="flex justify-end p-3">
           <Button @click="createProduct" class="p-button-success me-3">

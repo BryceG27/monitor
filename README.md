@@ -19,9 +19,6 @@ The `.env` file is setted to map ports for a multi-environment system: change `*
         This command will: 
         <ol>
             <li>
-                generate a key for your Laravel application;
-            </li>
-            <li>
                 start all the containers needed;
             </li>
             <li>
@@ -39,7 +36,15 @@ The `.env` file is setted to map ports for a multi-environment system: change `*
         </ol>
     </li>
     <li>
-        In the shell of the app container you just need to insert the command <code>php artisan migrate</code> to setup your database
+        In the shell of the app container you need to:
+        <ol>
+            <li>
+                generate a new key for laravel with the command: <code>php artisan key:generate</code>
+            </li>
+            <li>
+                insert the command <code>php artisan migrate</code> to setup your database
+            </li>
+        </ol>
     </li>
 </ul>
 

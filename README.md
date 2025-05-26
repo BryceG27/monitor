@@ -1,247 +1,197 @@
 # Technical Test - How to fire it up
 
-## Setting-up development environment
+## Setting up the development environment
 
-The first step is to create a copy of the dotfile `.env.example` and rename it as `.env`. A simple `cp .env.example .env` should do the job.
+First, copy the `.env.example` file and rename it to `.env`:
 
-### With Docker (suggested)
+```sh
+cp .env.example .env
+```
 
-#### Things to know before starting with Docker
-The `.env` file is setted to map ports for a multi-environment system: change `*_PORT_EXPOSED` to your port mapping preferences
+### With Docker (recommended)
 
-#### Commands list
+**Note:** The `.env` file is configured for multi-environment port mapping. Change `*_PORT_EXPOSED` as needed.
 
-<ul>
-    <li>
-        Using docker, the only thing to do is insert the command <code>make</code> in the shell;      
-    </li>
-    <li>
-        This command will: 
-        <ol>
-            <li>
-                start all the containers needed;
-            </li>
-            <li>
-                import Node;
-            </li>
-            <li>
-                install all of the Node dependencies;
-            </li>
-            <li>
-                make a new build of the assets;
-            </li>
-            <li>
-                enter in the shell of the container named <strong><em>app</em></strong>;
-            </li>
-        </ol>
-    </li>
-    <li>
-        In the shell of the app container you need to:
-        <ol>
-            <li>
-                generate a new key for laravel with the command: <code>php artisan key:generate</code>
-            </li>
-            <li>
-                insert the command <code>php artisan migrate</code> to setup your database
-            </li>
-        </ol>
-    </li>
-</ul>
+#### Quick start
 
-#### Makefile error
-In case the Makefile and the make command won't work <em>(or you don't want to use it)</em> you you'll have to do the steps one by one by yourself:
-<ol>
-    <li>
-        Install all the Laravel dependences with the command <code>docker compose run --rm composer install</code>;
-    </li>
-    <li>
-        Start up all the containers with the command <code>docker compose up -d</code>;
-    </li>
-    <li>
-        Enter in the shell of the app container (<code>docker exec -it app sh</code> will work just fine);
-    </li>
-    <li>
-        Generate the key for Laravel using the command <code>php artisan key:generate</code>
-    </li>
-    <li>
-        Only then you can setup the database with the command <code>php artisan migrate</code>;
-    </li>
-</ol>
+- Run:
+  ```sh
+  make
+  ```
+  This will:
+  1. Start all required containers
+  2. Import Node
+  3. Install all Node dependencies
+  4. Build the assets
+  5. Open a shell in the `app` container
+- In the `app` container shell, run:
+  ```sh
+  php artisan key:generate
+  php artisan migrate
+  ```
 
-### With the traditional way
+#### If Makefile does not work
 
-#### Things to know before starting w/o Docker
- - The database parameters are setted to use Docker containers and variables. You'll need to change the variable <code>DB_HOST</code> to <em>localhost</em> or to <em>127.0.0.1</em> instead of <em>DB</em>. Of course you'll have to change <code>DB_DATABASE</code>, <code>DB_USERNAME</code> and <code>DB_PASSWORD</code> variables too.
- - For this version of Laravel (v.12), sqlite is the default choice: you need just to comment all <code>DB_*</code> variables except the CONNECTION one that needs to be <code>sqlite</code>.
- - This version of Laravel (v.12) needs at least the version 8.2 of PHP.
- - You need Node and NPM to build the assets 
+Run these steps manually:
 
-#### Commands list
-<ol>
-    <li>
-        The first thing to do is install all the Laravel dependences with the command <code>compose install</code>;
-    </li>
-    <li>
-        Use the command <code>php artisan key:generate</code> to generate the unique key for your app;
-    </li>
-    <li>
-        Now you just need to insert the command <code>php artisan migrate</code> to setup your database;
-    </li>
-    <li>
-        Than you can install all the Node packages;
-    </li>
-    <li>
-        And build your assets with the command <code>npm run build</code>
-    </li>
-</ol>
+1. Install Laravel dependencies:
+   ```sh
+   docker compose run --rm composer install
+   ```
+2. Start containers:
+   ```sh
+   docker compose up -d
+   ```
+3. Enter the app container:
+   ```sh
+   docker exec -it app sh
+   ```
+4. Generate Laravel key:
+   ```sh
+   php artisan key:generate
+   ```
+5. Run migrations:
+   ```sh
+   php artisan migrate
+   ```
 
-## What now
-At the moment your app should be ready to use and you can verify it looking for the home page (<a href="localhost:8000" _target="blank">localhost:8000</a>) where you will find the version of the installed Laravel.<br>
-From now on you can start using all the APIs written in the <strong style="font-size: 16px">The APIs</strong> paragraph, but you could make just another step that could make your testing just a little easier seeding the database:
+### Without Docker
 
-In the shell of your Docker container or your local directory you can:
-<ul>
-    <li>
-        Create 50 products using the command <code>php artisan db:seed ProductsSeeder</code>;
-    </li>
-    <li>
-        Create 50 orders using the command <code>php artisan db:seed OrdersSeeder</code>;
-    </li>
-    <strong>OR</strong>
-    <li>Create a both using the command <code>php artisan db:seed DevSeeder</code></li>
-</ul>
+**Note:**
+- Update `DB_HOST` to `localhost` or `127.0.0.1` instead of `DB`.
+- Update `DB_DATABASE`, `DB_USERNAME`, and `DB_PASSWORD` as needed.
+- For Laravel 12, SQLite is the default: comment all `DB_*` variables except `DB_CONNECTION=sqlite`.
+- PHP >= 8.2 is required.
+- Node and NPM are required to build assets.
+
+#### Steps
+
+1. Install Laravel dependencies:
+   ```sh
+   composer install
+   ```
+2. Generate app key:
+   ```sh
+   php artisan key:generate
+   ```
+3. Run migrations:
+   ```sh
+   php artisan migrate
+   ```
+4. Install Node packages:
+   ```sh
+   npm install
+   ```
+5. Build assets:
+   ```sh
+   npm run build
+   ```
+
+## What now?
+
+Your app should now be ready. Visit [localhost:8000](http://localhost:8000) to check the Laravel version.
+
+You can now use the APIs described in the **The APIs** section. Optionally, you can seed the database for easier testing:
+
+- Create 50 products:
+  ```sh
+  php artisan db:seed ProductsSeeder
+  ```
+- Create 50 orders:
+  ```sh
+  php artisan db:seed OrdersSeeder
+  ```
+- Or both:
+  ```sh
+  php artisan db:seed DevSeeder
+  ```
 
 ## Testing
 
-#### The testing environment is setted to be use out of the box with Docker. In case you are not using Docker, follow this steps:
+The test environment is ready to use with Docker. If not using Docker:
 
-- In the `.env.example` file you can change <code>DB_CONNECTION</code> parameter to sqlite and comment all the rest of <code>DB_*</code> parameters to have a simple to use database.
-- Watch out! Every edit to the `.env*` files needs to be done with the app container shutted down or restarted!
+- In `.env.example`, set `DB_CONNECTION=sqlite` and comment out other `DB_*` variables.
+- Any change to `.env*` files requires the app container to be stopped or restarted.
 
-#### OR
+Alternatively:
 
-<ol>
-    <li>
-        Change the parameter <code>DB_PORT</code> from db_test to 127.0.0.1;
-    </li>
-    <li>
-        Create a new database, <code>laravel_test_db</code> will do the job;
-    </li>
-    <li>
-        Change the parameters <code>DB_USERNAME</code> and <code>DB_PASSWORD</code> as requested.
-    </li>
-</ol>
+1. Change `DB_PORT` from `db_test` to `127.0.0.1`.
+2. Create a new database (e.g., `laravel_test_db`).
+3. Update `DB_USERNAME` and `DB_PASSWORD` as needed.
 
-### Dipping down
+## Application overview
 
-<ul>
-    <li>
-        From the Homepage you will see 3 menus, <em>Home</em>, <em>Products</em>, <em>Orders</em>.
-    </li>
-</ul>
+From the homepage you will see three menus: **Home**, **Products**, **Orders**.
 
-#### Products
-<ul>
-    <li>
-        Entering the page, after the mouting of the component Index, will be recovered via an api call all the products that are not deleted which will be shown in the main table;
-    </li>
-    <li>
-        In order to create a new product you have to open the dialog form trough the <code>Create Product</code> button;
-        <ul>
-            <li>
-                Here you can set a name and a price for your new product.
-            </li>
-        </ul>
-    </li>
-    <li>
-        To edit a product you have to click the green pencil in the first column of the table.
-        <ul>
-            <li>
-                This action will open up the Form Dialog with all of the informations about the product.
-            </li>
-        </ul>
-    </li>
-    <li>
-        On the right of the <code>Edit button</code>, you will find a trash can to soft eliminate the product after the confirmation of the action.
-        <ul>
-            <li>
-                Watch out! If you try to eliminate a product that is already synced to a order, the app will inform you that the action is not allowed.
-            </li>
-        </ul>
-    </li>
-</ul>
+### Products
 
-#### Orders
-<ul>
-    <li>
-        Entering the page, after the mounting of the component Index, will be recovered via two api calls all the orders and all the products that are not deleted. The Orders will be shown in the table component;
-    </li>
-    <li>
-        In order to create a new product you have to open the dialog form trough the <code>Create Order</code> button;
-        <ul>
-            <li>
-                Here you can set:
-                <ul>
-                    <li>A name for your order;</li>
-                    <li>A description;</li>
-                    <li>A date;</li>
-                    <li>And, clicking on the product's rows in the table and selecting a quantity for them, you can attach some items for the new order</li>
-                </ul>
-            </li> 
-        </ul>
-    </li>
-    <li>
-        The first column of the Orders Table is an expandable row that includes all the order items related to the order and delete some column
-    </li>
-    <li>
-        To edit a order you have to click the green pencil in the first column of the table.
-        <ul>
-            <li>
-                This action will open up the Form Dialog with all of the informations about the order.
-            </li>
-            <li>
-                By de-selecting the green rows and saving, you can also remove the items from the order
-            </li>
-        </ul>
-    </li>
-    <li>
-        On the right of the <code>Edit button</code>, you will find a trash can to soft eliminate the order after the confirmation of the action.
-    </li>
-</ul>
+- On page load, all non-deleted products are fetched and displayed in a table.
+- To create a product, click **Create Product** and fill in the form.
+- To edit a product, click the green pencil icon in the table.
+- To delete a product, click the trash icon. If the product is linked to an order, deletion is not allowed.
 
-### The test framework
-The test framework used for this project is PEST. It's been created by one of the Laravel Developers so the integration is flawless and the syntax of it is really simple.
+### Orders
 
-The following tests are all written in the directory <code>tests/Feature</code>:
-<ul>
-    <li>
-        <strong>CRUDProductTest</strong> will:
-        <ol>
-            <li>
-                Check if a product can be created;
-            </li>
-            <li>
-                Check if a product can be updated;
-            </li>
-            <li>
-                Check if a product can be deleted.
-            </li>
-        </ol>
-    </li>
-    <li>
-        <strong>CRUDOrderTest</strong> will:
-        <ol>
-            <li>
-                Check if a order can be created;
-            </li>
-            <li>
-                Check if a order can be updated;
-            </li>
-            <li>
-                Check if a order can be deleted.
-            </li>
-        </ol>
-    </li>
-</ul>
+- On page load, all orders and non-deleted products are fetched and displayed.
+- To create an order, click **Create Order** and fill in the form (name, description, date, and select products with quantities).
+- The first column of the orders table is expandable and shows order items.
+- To edit an order, click the green pencil icon. You can also remove items by deselecting them and saving.
+- To delete an order, click the trash icon.
 
-To start all the tests you have to use the command `php artisan test` from the shell of your Docker container or of your local repository.
+## Test framework
+
+This project uses [PEST](https://pestphp.com/) for testing. All tests are in `tests/Feature`:
+
+- **CRUDProductTest**
+  1. Checks product creation
+  2. Checks product update
+  3. Checks product deletion
+- **CRUDOrderTest**
+  1. Checks order creation
+  2. Checks order update
+  3. Checks order deletion
+
+## Running tests
+
+To run all tests:
+
+```sh
+php artisan test
+```
+
+Run this command from your Docker container shell or your local repository.
+
+---
+
+## Resources used
+
+### Backend
+
+| Name      | Description                                   | Link                                      |
+|-----------|-----------------------------------------------|-------------------------------------------|
+| Laravel 12| PHP web framework                             | https://laravel.com/                      |
+| Sanctum   | API authentication for Laravel                | https://laravel.com/docs/12.x/sanctum      |
+| Composer  | Dependency manager for PHP                    | https://getcomposer.org/                   |
+
+### Frontend
+
+| Name        | Description                                 | Link                                      |
+|-------------|---------------------------------------------|-------------------------------------------|
+| Vue 3       | JavaScript framework for UI                 | https://vuejs.org/                        |
+| Axios       | HTTP client for API calls                   | https://axios-http.com/                    |
+| PrimeVue    | UI component library for Vue                | https://www.primefaces.org/primevue/       |
+| PrimeIcons  | Icon library for PrimeVue                   | https://www.primefaces.org/primevue/showcase/#/icons |
+| Moment.js   | Date formatting library                     | https://momentjs.com/                      |
+| Sweetalert2 | Alert and modal library                     | https://sweetalert2.github.io/             |
+| Tailwind CSS| Utility-first CSS framework                 | https://tailwindcss.com/                   |
+| Node.js     | JavaScript runtime                          | https://nodejs.org/                        |
+| NPM         | Node package manager                        | https://www.npmjs.com/                     |
+
+### Development & Tooling
+
+| Name         | Description                                 | Link                                      |
+|--------------|---------------------------------------------|-------------------------------------------|
+| Docker       | Containerization platform                   | https://www.docker.com/                    |
+| Make         | Build automation tool                       | https://www.gnu.org/software/make/         |
+
+---
